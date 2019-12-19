@@ -10,7 +10,7 @@ export default () => {
   const onPositionRecieved = ({ coords }) => {
     setPosition({
       latitude: coords.latitude,
-      longitude: coords.longitude,
+      longitude: coords.longitude
     })
   }
 
@@ -23,7 +23,7 @@ export default () => {
       onPositionRecieved,
       onPositionNotRecieved,
       {
-        timeout: 2,
+        timeout: 2
       }
     )
   }

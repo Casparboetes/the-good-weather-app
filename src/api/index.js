@@ -22,7 +22,7 @@ export const useAsyncGetForecast = ({ ...params }) => {
       setLoading(true)
       const response = await axios({
         method: 'get',
-        url: `https://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=${secrets.YOUR_API_KEY}`,
+        url: `https://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=${secrets.YOUR_API_KEY}`
       })
       console.log(response.data)
 
@@ -31,8 +31,8 @@ export const useAsyncGetForecast = ({ ...params }) => {
           weather: [{ main, description, icon }],
           main: { temp },
           name,
-          id,
-        },
+          id
+        }
       } = response
 
       setData({
@@ -41,7 +41,7 @@ export const useAsyncGetForecast = ({ ...params }) => {
         icon,
         name,
         id,
-        temp,
+        temp
       })
     } catch (error) {
       setError(error)

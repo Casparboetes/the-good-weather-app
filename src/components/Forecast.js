@@ -5,7 +5,7 @@ const foreCastStyle = {
   backgroundColor: 'red',
   width: '100px',
   height: 'auto',
-  padding: '1rem',
+  padding: '1rem'
 }
 
 const Forecast = () => {
