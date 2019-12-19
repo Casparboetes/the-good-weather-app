@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Forcast from './components/Forecast'
 
 import './App.css'
 
@@ -25,22 +26,22 @@ export default () => {
         timeout: 2,
       }
     )
-  } else {
-    console.log('Geolocation blocked')
   }
 
   return (
     <div className='App'>
-      {position.latitude} {position.longitude}
       <code>
         {error !== 'Timeout expired' ? (
           <h4>{error}</h4>
         ) : (
-          <h4>
-            {position.latitude}&nbsp;{position.longitude}
-          </h4>
+          <div>
+            <h4>
+              {position.latitude}&nbsp;{position.longitude}
+            </h4>
+          </div>
         )}
       </code>
+      <Forcast />
     </div>
   )
 }
