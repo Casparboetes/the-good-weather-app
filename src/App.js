@@ -3,20 +3,19 @@ import React, { useState } from 'react'
 import './App.css'
 
 export default () => {
-  const [position, setPosition] = useState()
-  const [latitude, setLatitude] = useState()
-  const [longitude, setLongitude] = useState()
+  const [position, setPosition] = useState({})
   const [error, setError] = useState()
 
-  const onPositionRecieved = position => {
-    console.log(position)
-    setPosition(position.coords.latitude)
-    setLatitude(position.coords.latitude)
-    setLongitude(position.coords.longitude)
+  const onPositionRecieved = ({ coords }) => {
+    console.log({ coords })
+    setPosition({
+      latitude: coords.latitude,
+      longitude: coords.longitude,
+    })
   }
 
   const onPositionNotRecieved = positionError => {
-    console.log(positionError.message)
+    console.log(positionError)
     setError(positionError.message)
   }
 
@@ -34,12 +33,13 @@ export default () => {
 
   return (
     <div className='App'>
+      {position.latitude} {position.longitude}
       <code>
         {error !== 'Timeout expired' ? (
           <h4>{error}</h4>
         ) : (
           <h4>
-            {position}&nbsp;{latitude}&nbsp;{longitude}
+            {position.latitude}&nbsp;{position.longitude}
           </h4>
         )}
       </code>
