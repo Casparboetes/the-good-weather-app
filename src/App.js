@@ -7,16 +7,14 @@ export default () => {
   const [error, setError] = useState()
 
   const onPositionRecieved = ({ coords }) => {
-    console.log({ coords })
     setPosition({
       latitude: coords.latitude,
       longitude: coords.longitude,
     })
   }
 
-  const onPositionNotRecieved = positionError => {
-    console.log(positionError)
-    setError(positionError.message)
+  const onPositionNotRecieved = ({ message }) => {
+    setError(message)
   }
 
   if (navigator.geolocation) {
