@@ -36,12 +36,12 @@ export default () => {
         ) : (
           <div>
             <h4>
-              {position.latitude}&nbsp;{position.longitude}
+              Latitude: {position.latitude}&nbsp;Longitude: {position.longitude}
             </h4>
+            <Forcast {...position} />
           </div>
         )}
       </code>
-      <Forcast />
     </div>
   )
 }
