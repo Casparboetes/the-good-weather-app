@@ -57,8 +57,8 @@ export const useAsyncGetForecast = props => {
         setLoading(true)
         const response = await axios({
           method: 'get',
-          url: `https://api.openweathermap.org/data/2.5/forecast?lat=52.338688&lon=4.907007999999999&units=metric&appid=${secrets.YOUR_API_KEY}`
-          // url: `https://api.openweathermap.org/data/2.5/weather?q=London,uk&units=metric&appid=${secrets.YOUR_API_KEY}`
+          // url: `https://api.openweathermap.org/data/2.5/forecast?lat=${state.latitude}&lon=${state.longitude}&units=metric&appid=${secrets.YOUR_API_KEY}`
+          url: `https://api.openweathermap.org/data/2.5/weather?q=London,uk&units=metric&appid=${secrets.YOUR_API_KEY}`
         })
         // console.log(response.data)
         // const { data } = response.data

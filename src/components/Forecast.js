@@ -10,19 +10,11 @@ const foreCastStyle = {
 }
 
 const Forecast = props => {
-  // const [state, setState] = useState(props)
-
-  // useEffect(() => {
-  //   setState(props)
-  // }, [props])
-
   const { data, loading, error } = useAsyncGetForecast(props)
 
   if (loading) return <div>Loading...</div>
-  // if (error) return <div>{error}</div>
-  console.log('data in forecast', data)
+  if (error) return <div>{error}</div>
 
-  // if (data) {
   return (
     <div style={foreCastStyle}>
       <div>{data.name}</div>
@@ -41,7 +33,6 @@ const Forecast = props => {
       <div>{data.temp}</div>
     </div>
   )
-  // }
 }
 
 export default Forecast
