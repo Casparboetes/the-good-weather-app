@@ -1,20 +1,24 @@
+/* optional colors for background? 
+  sun = #ff896b
+  Thunderstorm = #393e46
+  Drizzle = #89a4c7
+  Rain = #1f3c88
+  Snow = #f3f9fb
+  Atmosphere = #cdd5e0
+  Clear = #9aceff
+  Clouds = #4e709d
+  black = #000
+  white: #fff
+
+*/
+
 .App {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
+.App__body {
+  background-color: #9aceff;
+  /* filter: brightness(85%); */
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -24,15 +28,21 @@
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+@media (prefers-reduced-motion: no-preference) {
+  .card__img {
+    transform: scale(1.1);
+    animation: Grow-Shrink-slowly infinite 30s linear;
+  }
 }
 
-@keyframes App-logo-spin {
+@keyframes Grow-Shrink-slowly {
   from {
-    transform: rotate(0deg);
+    transform: scale(1.1);
+  }
+  50% {
+    transform: scale(1.7);
   }
   to {
-    transform: rotate(360deg);
+    transform: scale(1.1);
   }
 }

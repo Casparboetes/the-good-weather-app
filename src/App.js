@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Forcast from './components/Forecast'
+import Forecast from './components/Forecast'
 
 import './App.css'
 
@@ -8,14 +8,20 @@ export default () => {
   const [error, setError] = useState()
 
   const onPositionRecieved = ({ coords }) => {
-    setPosition({
-      latitude: coords.latitude,
-      longitude: coords.longitude
-    })
+    console.log('COORDS', coords)
+    if (coords) {
+      setPosition({
+        latitude: coords.latitude,
+        longitude: coords.longitude
+      })
+    }
   }
 
   const onPositionNotRecieved = ({ message }) => {
-    setError(message)
+    console.log('ERROR MESSAGE', message)
+    if (message) {
+      setError(message)
+    }
   }
 
   if (navigator.geolocation) {
@@ -30,18 +36,18 @@ export default () => {
 
   return (
     <div className='App'>
-      <code>
+      <div className='App__body'>
         {error !== 'Timeout expired' ? (
           <h4>{error}</h4>
         ) : (
           <div>
-            <h4>
-              Latitude: {position.latitude}&nbsp;Longitude: {position.longitude}
-            </h4>
-            <Forcast {...position} />
+            <Forecast {...position} />
+            <div style={{ backgroundColor: 'peach' }}>
+              <Forecast {...position} />
+            </div>
           </div>
         )}
-      </code>
+      </div>
     </div>
   )
 }

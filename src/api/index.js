@@ -45,8 +45,19 @@ import secrets from '../secrets.js'
 // For different languages
 // `http://api.openweathermap.org/data/2.5/forecast?id=524901&lang=${lang}&appid=${secrets.YOUR_API_KEY}`
 
+// Limitation of result
+// Description:
+// To limit number of listed cities please setup 'cnt' parameter that specifies the number of lines returned.
+
+// Parameters:
+// cnt number of lines in response
+// Examples of API calls:
+// cnt=3 api.openweathermap.org/data/2.5/find?lat=57&lon=-2.15&cnt=3 <<<<<<!!!
+
+const language = 'nl'
+
 export const useAsyncGetForecast = props => {
-  const [data, setData] = useState({})
+  const [data, setData] = useState({ data: null })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [state, setState] = useState(props)
@@ -57,29 +68,54 @@ export const useAsyncGetForecast = props => {
         setLoading(true)
         const response = await axios({
           method: 'get',
-          // url: `https://api.openweathermap.org/data/2.5/forecast?lat=${state.latitude}&lon=${state.longitude}&units=metric&appid=${secrets.YOUR_API_KEY}`
-          url: `https://api.openweathermap.org/data/2.5/weather?q=London,uk&units=metric&appid=${secrets.YOUR_API_KEY}`
+          url: `https://api.openweathermap.org/data/2.5/forecast?lat=${state.latitude}&lon=${state.longitude}&units=metric&lang=${language}&appid=${secrets.YOUR_API_KEY}`
+          // url: `https://api.openweathermap.org/data/2.5/forecast?q=Accra,ghana&units=metric&cnt=40&lang=${language}&appid=${secrets.YOUR_API_KEY}`
         })
-        // console.log(response.data)
-        // const { data } = response.data
-        // setData(data)
-        const {
-          data: {
-            weather: [{ main, description, icon }],
-            main: { temp },
-            name,
-            id
-          }
-        } = response
+        // all data
+        // const { data } = response
+        // setData({ data })
 
-        setData({ main, description, icon, name, id, temp })
+        // 5dagen
+        // const { list } = response.data
+        // const itIsTwelveOclock = '12:00:00'
+        // const filterOntime = list.filter(el =>
+        //   el.dt_txt.includes(itIsTwelveOclock)
+        // )
+        // console.log(
+        //   'filterOntimefilterOntimefilterOntimefilterOntime',
+        //   filterOntime
+        // )
+        // Eentje
+        // console.log(list[0])
+        const {
+          city: { id: cityId, name }
+        } = response.data
+
+        for (const {
+          dt,
+          main: { temp, temp_max: tempMax, temp_min: tempMin },
+          weather: [{ id: weatherId, description, icon }],
+          dt_txt: date
+        } of response.data.list)
+          setData({
+            dt,
+            temp,
+            tempMax,
+            tempMin,
+            weatherId,
+            description,
+            icon,
+            date,
+            cityId,
+            name
+          })
       } catch (error) {
+        console.log('ERROR IN API CALL', error)
         // setError(error)
       } finally {
         setLoading(false)
       }
     }
-
     setState(props)
 
     getForecast()
