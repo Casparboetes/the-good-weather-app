@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useAsyncGetForecast } from '../api'
 import MaxMinTemp from './MaxMinTemp'
+import FiveDayForecast from './FiveDayForecast'
 
 const foreCastStyle = {
   width: '100%',
@@ -8,9 +9,11 @@ const foreCastStyle = {
   color: 'white'
 }
 
+const degreeSymbol = '°'
+
 const Forecast = props => {
   const [data, loading, error] = useAsyncGetForecast(props)
-  const [degreeSymbol] = useState('°')
+  // const [degreeSymbol] = useState('°')
 
   if (!data || loading) return <div></div> // PROBABLY REMOVE THIS
   // if (error) return <div>{error}</div>
@@ -75,13 +78,13 @@ const Forecast = props => {
         weather: [{ id: weatherId, description, icon }]
       } = el
 
-      return { dt, temp, weatherId, icon, description, date }
+      return { dt, temp, weatherId, icon, description }
     })
 
     return (
       <ul>
-        {newMap.map(el => (
-          <li key={el.weatherId}>
+        {newMap.map((el, index) => (
+          <li key={index}>
             <h3>{getWeekday(el.dt)}</h3>
             <img
               style={{ transform: 0.5 }}
@@ -126,6 +129,7 @@ const Forecast = props => {
 
       {/* make into component */}
       {fiveDayForecast(data)}
+      <FiveDayForecast data={data} />
     </div>
   )
 }

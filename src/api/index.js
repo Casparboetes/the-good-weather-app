@@ -2,27 +2,9 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import secrets from '../secrets.js'
 
-// see which params are needed for which call
 // for geolocation
 // for city & coutry
 // for languages
-// export const  useAsyncGetForecast = (endpoint, { method, data, jwt } = {}) => {
-
-// useEffect(() => {
-//   getForecast()
-//   setState(props)
-// }, [props])
-// { latitude, longitude } = props
-// console.log(props)
-
-// console.log(latitude)
-// console.log(longitude)
-
-// const lat = 52.338688
-// const lon = 4.907007999999999
-
-// const lon = 4.89
-// const lat = 52.37
 
 // Different units
 // `https://api.openweathermap.org/data/2.5/weather?q=${city},${country}&units=metric&appid=${secrets.YOUR_API_KEY}`
@@ -35,7 +17,7 @@ import secrets from '../secrets.js'
 // For different languages
 // `http://api.openweathermap.org/data/2.5/forecast?id=524901&lang=${lang}&appid=${secrets.YOUR_API_KEY}`
 
-const language = 'nl'
+const language = 'en'
 
 export const useAsyncGetForecast = props => {
   const [data, setData] = useState(null)

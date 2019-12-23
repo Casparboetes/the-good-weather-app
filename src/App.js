@@ -8,6 +8,7 @@ export default () => {
   const [position, setPosition] = useState(null)
   const [error, setError] = useState()
   const [searchTerm, setSearchTerm] = useState()
+
   const [props, setProps] = useState({})
 
   const onEnter = event => {
@@ -18,6 +19,7 @@ export default () => {
         longitude: null,
         city: searchTerm
       })
+      setSearchTerm((event.target.value = null))
     }
   }
 
