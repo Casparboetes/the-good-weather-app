@@ -7,10 +7,6 @@ import secrets from '../secrets.js'
 // for city & coutry
 // for languages
 // export const  useAsyncGetForecast = (endpoint, { method, data, jwt } = {}) => {
-// think also about this const apiUrl =
-//   searchParams && searchParams.length > 0
-//     ? `someUrl`
-//     : 'someOtherUrl'
 
 // useEffect(() => {
 //   getForecast()
@@ -36,90 +32,54 @@ import secrets from '../secrets.js'
 
 // imperial api.openweathermap.org/data/2.5/find?q=London&units=imperial
 
-// GEOLOCATION
-// url = `api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${secrets.YOUR_API_KEY}`
-
-// BY CITY
-// `https://api.openweathermap.org/data/2.5/weather?q=${city},${country}&appid=${secrets.YOUR_API_KEY}`
-
 // For different languages
 // `http://api.openweathermap.org/data/2.5/forecast?id=524901&lang=${lang}&appid=${secrets.YOUR_API_KEY}`
-
-// Limitation of result
-// Description:
-// To limit number of listed cities please setup 'cnt' parameter that specifies the number of lines returned.
-
-// Parameters:
-// cnt number of lines in response
-// Examples of API calls:
-// cnt=3 api.openweathermap.org/data/2.5/find?lat=57&lon=-2.15&cnt=3 <<<<<<!!!
 
 const language = 'nl'
 
 export const useAsyncGetForecast = props => {
-  const [data, setData] = useState({ data: null })
-  const [loading, setLoading] = useState(false)
+  const [data, setData] = useState(null)
   const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(false)
   const [state, setState] = useState(props)
 
+  const apiUrl =
+    state.latitude && state.longitude
+      ? `https://api.openweathermap.org/data/2.5/forecast?lat=${state.latitude}&lon=${state.longitude}&units=metric&lang=${language}&appid=${secrets.YOUR_API_KEY}`
+      : `https://api.openweathermap.org/data/2.5/forecast?q=${state.city},${state.country}&units=metric&cnt=40&lang=${language}&appid=${secrets.YOUR_API_KEY}`
+
   useEffect(() => {
+    setState(props)
+
     const getForecast = async () => {
       try {
         setLoading(true)
         const response = await axios({
           method: 'get',
-          url: `https://api.openweathermap.org/data/2.5/forecast?lat=${state.latitude}&lon=${state.longitude}&units=metric&lang=${language}&appid=${secrets.YOUR_API_KEY}`
-          // url: `https://api.openweathermap.org/data/2.5/forecast?q=Accra,ghana&units=metric&cnt=40&lang=${language}&appid=${secrets.YOUR_API_KEY}`
+          url: apiUrl
+          // url: `https://api.openweathermap.org/data/2.5/forecast?lat=${state.latitude}&lon=${state.longitude}&units=metric&lang=${language}&appid=${secrets.YOUR_API_KEY}`
+          // url: `https://api.openweathermap.org/data/2.5/forecast?q=${state.city},${state.country}&units=metric&cnt=40&lang=${language}&appid=${secrets.YOUR_API_KEY}`
         })
-        // all data
-        // const { data } = response
-        // setData({ data })
-
-        // 5dagen
-        // const { list } = response.data
-        // const itIsTwelveOclock = '12:00:00'
-        // const filterOntime = list.filter(el =>
-        //   el.dt_txt.includes(itIsTwelveOclock)
-        // )
-        // console.log(
-        //   'filterOntimefilterOntimefilterOntimefilterOntime',
-        //   filterOntime
-        // )
-        // Eentje
-        // console.log(list[0])
-        const {
-          city: { id: cityId, name }
-        } = response.data
-
-        for (const {
-          dt,
-          main: { temp, temp_max: tempMax, temp_min: tempMin },
-          weather: [{ id: weatherId, description, icon }],
-          dt_txt: date
-        } of response.data.list)
-          setData({
-            dt,
-            temp,
-            tempMax,
-            tempMin,
-            weatherId,
-            description,
-            icon,
-            date,
-            cityId,
-            name
-          })
+        const { data } = response
+        setData(data)
       } catch (error) {
         console.log('ERROR IN API CALL', error)
-        // setError(error)
+        setError(error)
       } finally {
         setLoading(false)
       }
     }
-    setState(props)
 
     getForecast()
-  }, [props, state.latitude, state.longitude])
+  }, [
+    props,
+    apiUrl,
+    state.latitude,
+    state.longitude,
+    state.city,
+    state.country,
+    state.language
+  ])
 
-  return { data, loading, error }
+  return [data, loading, error]
 }

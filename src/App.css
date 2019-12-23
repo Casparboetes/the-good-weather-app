@@ -17,7 +17,7 @@
 }
 
 .App__body {
-  background-color: #9aceff;
+  background-color: #89a4c7;
   /* filter: brightness(85%); */
   min-height: 100vh;
   display: flex;
@@ -26,6 +26,19 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+}
+ul {
+  padding: 0;
+}
+
+li {
+}
+
+ul > li {
+  display: inline-block;
+  list-style-type: none;
+  /* font-size: calc(1px + 2vmin); */
+  cursor: default;
 }
 
 @media (prefers-reduced-motion: no-preference) {

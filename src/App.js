@@ -1,16 +1,38 @@
 import React, { useState } from 'react'
 import Forecast from './components/Forecast'
+import WeatherSearchBar from './components/WeatherSearchBar'
 
 import './App.css'
 
 export default () => {
-  const [position, setPosition] = useState({})
+  const [position, setPosition] = useState(null)
   const [error, setError] = useState()
+  const [searchTerm, setSearchTerm] = useState()
+  const [props, setProps] = useState({})
+
+  const onEnter = event => {
+    if (event.key === 'Enter') {
+      setProps({
+        // ...props,
+        latitude: null,
+        longitude: null,
+        city: searchTerm
+      })
+    }
+  }
+
+  // const handleInputChange = (e) => setInput({
+  //   ...input,
+  //   [e.currentTarget.name]: e.currentTarget.value
+  // })
+  const userInput = event => {
+    setSearchTerm(event.target.value)
+  }
 
   const onPositionRecieved = ({ coords }) => {
-    console.log('COORDS', coords)
     if (coords) {
-      setPosition({
+      setProps({
+        // ...props,
         latitude: coords.latitude,
         longitude: coords.longitude
       })
@@ -29,7 +51,7 @@ export default () => {
       onPositionRecieved,
       onPositionNotRecieved,
       {
-        timeout: 2
+        timeout: 5
       }
     )
   }
@@ -37,16 +59,20 @@ export default () => {
   return (
     <div className='App'>
       <div className='App__body'>
-        {error !== 'Timeout expired' ? (
-          <h4>{error}</h4>
-        ) : (
-          <div>
-            <Forecast {...position} />
-            <div style={{ backgroundColor: 'peach' }}>
-              <Forecast {...position} />
-            </div>
-          </div>
-        )}
+        {/* {error !== 'Timeout expired' ? (
+          <div>...</div>
+        ) : ( */}
+        <div>
+          <span>
+            <WeatherSearchBar
+              value={searchTerm}
+              handleChange={userInput}
+              handleKeyPress={onEnter}
+            />
+          </span>
+        </div>
+        <Forecast {...props} />
+        {/* )} */}
       </div>
     </div>
   )

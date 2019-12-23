@@ -1,49 +1,29 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useAsyncGetForecast } from '../api'
 import MaxMinTemp from './MaxMinTemp'
 
 const foreCastStyle = {
   width: '100%',
   height: 'auto',
-  // color: '#e96e50',
   color: 'white'
 }
 
 const Forecast = props => {
+  const [data, loading, error] = useAsyncGetForecast(props)
   const [degreeSymbol] = useState('°')
-  const [state, setState] = useState()
 
-  // if (props) {
-  const { data, loading, error } = useAsyncGetForecast(props)
-  // }
-
-  if (!data || loading) return <div>Loading...</div> // PROBABLY REMOVE THIS
+  if (!data || loading) return <div></div> // PROBABLY REMOVE THIS
   // if (error) return <div>{error}</div>
 
-  // const { name, id } = data
-  // console.log(name, id)
-  // if (data) {
-  // console.log('1', data)
-  // console.log('2', state)
-  // const { city } = data
-  // console.log('ggg', city)
+  const {
+    city: { name }
+  } = data
 
-  // for (const {
-  //   dt,
-  //   main: { temp, temp_max: tempMax, temp_min: tempMin },
-  //   weather: [{ id: weatherId, description, icon }],
-  //   dt_txt: date
-  // } of data.list) {
-  //   const x = [
-  //     ...{ dt, temp, tempMax, tempMin, weatherId, description, icon, date }
-  //   ]
-  //   console.log(x)
-  //   // setData([
-  //   //   ...[dt, temp, tempMax, tempMin, weatherId, description, icon, date]
-  //   //   // cityId,
-  //   //   // name,
-  //   // ])
-  // }
+  const {
+    main: { temp, temp_max: tempMax, temp_min: tempMin },
+    weather: [{ description, icon }],
+    dt_txt: date
+  } = data.list[0]
 
   const removeDecimal = temp => {
     if (temp) {
@@ -58,34 +38,94 @@ const Forecast = props => {
     }
   }
 
+  // TODOL RENAME THE TINGS
+
+  const getFullDate = unixTimestamp => {
+    const fullDate = new Date(unixTimestamp * 1000)
+
+    return fullDate
+  }
+  // TODOL RENAME THE TINGS
+
+  const getWeekday = unixTimestamp => {
+    const weekdays = [
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday'
+    ]
+
+    const n = weekdays[getFullDate(unixTimestamp).getUTCDay()]
+    return n
+  }
+
+  // TODOL RENAME THE TINGS
+  const fiveDayForecast = value => {
+    const { list } = value
+    const itIsTwelveOclock = '12:00:00'
+    const filterOnTime = list.filter(el => el.dt_txt.includes(itIsTwelveOclock))
+
+    const newMap = filterOnTime.map(el => {
+      const {
+        dt,
+        main: { temp },
+        weather: [{ id: weatherId, description, icon }]
+      } = el
+
+      return { dt, temp, weatherId, icon, description, date }
+    })
+
+    return (
+      <ul>
+        {newMap.map(el => (
+          <li key={el.weatherId}>
+            <h3>{getWeekday(el.dt)}</h3>
+            <img
+              style={{ transform: 0.5 }}
+              // className='card__img'
+              src={
+                el.icon
+                  ? `http://openweathermap.org/img/wn/${el.icon}@2x.png`
+                  : null
+              }
+              alt={el.description}
+            ></img>
+            <h2>
+              {removeDecimal(el.temp)}
+              {temp ? degreeSymbol : null}
+            </h2>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+
   return (
     <div className='card' style={foreCastStyle}>
       <div className='card__container'>
-        <h1 className='card__title'>{data.name}</h1>
+        <h1 className='card__title'>{name}</h1>
         <img
           className='card__img'
-          src={
-            data.icon
-              ? `http://openweathermap.org/img/wn/${data.icon}@2x.png`
-              : null
-          }
-          alt={data.description}
+          src={icon ? `http://openweathermap.org/img/wn/${icon}@2x.png` : null}
+          alt={description}
         ></img>
         <h1 className='card__temp'>
-          {removeDecimal(data.temp)}
-          {data.temp ? degreeSymbol : null}
+          {removeDecimal(temp)}
+          {temp ? degreeSymbol : null}
         </h1>
         <MaxMinTemp
-          props={[
-            removeDecimal(data.tempMax),
-            removeDecimal(data.tempMin),
-            degreeSymbol
-          ]}
+          props={[removeDecimal(tempMax), removeDecimal(tempMin), degreeSymbol]}
         />
         <h4 className='card__description--capitalized'>
-          {capitalizeFirstLetter(data.description)}
+          {capitalizeFirstLetter(description)}
         </h4>
       </div>
+
+      {/* make into component */}
+      {fiveDayForecast(data)}
     </div>
   )
 }
