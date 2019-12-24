@@ -11,7 +11,9 @@
   white: #fff
 
 */
-
+body {
+  background-color: #ff896b;
+}
 .App {
   text-align: center;
   background-color: #89a4c7;
