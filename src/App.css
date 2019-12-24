@@ -14,9 +14,6 @@
 
 .App {
   text-align: center;
-}
-
-.App__body {
   background-color: #89a4c7;
   /* filter: brightness(85%); */
   min-height: 100vh;
@@ -26,6 +23,17 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+}
+
+.App__body {
+  /* background-color: #89a4c7;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white; */
 }
 ul {
   padding: 0;

@@ -3,17 +3,16 @@ import removeDecimal from '../utils'
 
 const degreeSymbol = '°'
 
-const FiveDayForecast = ({ data }) => {
+const FiveDayForecast = ({ data, loading, error }) => {
+  if (!data || loading) return <div></div> // PROBABLY REMOVE THIS
+  if (!data && error) return <div>Something went wrong ...</div>
   const { list } = data
-
-  // TODOL RENAME THE TINGS
 
   const getFullDate = unixTimestamp => {
     const fullDate = new Date(unixTimestamp * 1000)
 
     return fullDate
   }
-  // TODOL RENAME THE TINGS
 
   const getWeekday = unixTimestamp => {
     const weekdays = [
@@ -31,7 +30,6 @@ const FiveDayForecast = ({ data }) => {
     return dayOfTheWeek
   }
 
-  // TODOL RENAME THE TINGS
   const fiveDayForecast = list => {
     const itIsTwelveOclock = '12:00:00'
     const filterOnTwelveOClock = list.filter(el =>

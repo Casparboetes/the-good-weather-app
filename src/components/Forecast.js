@@ -1,7 +1,5 @@
 import React from 'react'
-import { useAsyncGetForecast } from '../api'
 import MaxMinTemp from './MaxMinTemp'
-import FiveDayForecast from './FiveDayForecast'
 
 const foreCastStyle = {
   width: '100%',
@@ -11,12 +9,9 @@ const foreCastStyle = {
 
 const degreeSymbol = '°'
 
-const Forecast = props => {
-  const [data, loading, error] = useAsyncGetForecast(props)
-  // const [degreeSymbol] = useState('°')
-
+export const Forecast = ({ data, loading, error }) => {
   if (!data || loading) return <div></div> // PROBABLY REMOVE THIS
-  // if (error) return <div>{error}</div>
+  if (!data && error) return <div>Something went wrong ...</div>
 
   const {
     city: { name }
@@ -24,8 +19,7 @@ const Forecast = props => {
 
   const {
     main: { temp, temp_max: tempMax, temp_min: tempMin },
-    weather: [{ description, icon }],
-    dt_txt: date
+    weather: [{ description, icon }]
   } = data.list[0]
 
   const removeDecimal = temp => {
@@ -39,71 +33,6 @@ const Forecast = props => {
     if (string) {
       return string.charAt(0).toUpperCase() + string.slice(1)
     }
-  }
-
-  // TODOL RENAME THE TINGS
-
-  const getFullDate = unixTimestamp => {
-    const fullDate = new Date(unixTimestamp * 1000)
-
-    return fullDate
-  }
-  // TODOL RENAME THE TINGS
-
-  const getWeekday = unixTimestamp => {
-    const weekdays = [
-      'Sunday',
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday'
-    ]
-
-    const n = weekdays[getFullDate(unixTimestamp).getUTCDay()]
-    return n
-  }
-
-  // TODOL RENAME THE TINGS
-  const fiveDayForecast = value => {
-    const { list } = value
-    const itIsTwelveOclock = '12:00:00'
-    const filterOnTime = list.filter(el => el.dt_txt.includes(itIsTwelveOclock))
-
-    const newMap = filterOnTime.map(el => {
-      const {
-        dt,
-        main: { temp },
-        weather: [{ id: weatherId, description, icon }]
-      } = el
-
-      return { dt, temp, weatherId, icon, description }
-    })
-
-    return (
-      <ul>
-        {newMap.map((el, index) => (
-          <li key={index}>
-            <h3>{getWeekday(el.dt)}</h3>
-            <img
-              style={{ transform: 0.5 }}
-              // className='card__img'
-              src={
-                el.icon
-                  ? `http://openweathermap.org/img/wn/${el.icon}@2x.png`
-                  : null
-              }
-              alt={el.description}
-            ></img>
-            <h2>
-              {removeDecimal(el.temp)}
-              {temp ? degreeSymbol : null}
-            </h2>
-          </li>
-        ))}
-      </ul>
-    )
   }
 
   return (
@@ -126,12 +55,6 @@ const Forecast = props => {
           {capitalizeFirstLetter(description)}
         </h4>
       </div>
-
-      {/* make into component */}
-      {fiveDayForecast(data)}
-      <FiveDayForecast data={data} />
     </div>
   )
 }
-
-export default Forecast

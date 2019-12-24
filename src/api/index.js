@@ -17,51 +17,51 @@ import secrets from '../secrets.js'
 // For different languages
 // `http://api.openweathermap.org/data/2.5/forecast?id=524901&lang=${lang}&appid=${secrets.YOUR_API_KEY}`
 
-const language = 'en'
+// const language = 'en'
 
-export const useAsyncGetForecast = props => {
+export const useAsyncGetForecast = () => {
+  // console.log(props)
   const [data, setData] = useState(null)
+  const [url, setUrl] = useState()
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
-  const [state, setState] = useState(props)
 
-  const apiUrl =
-    state.latitude && state.longitude
-      ? `https://api.openweathermap.org/data/2.5/forecast?lat=${state.latitude}&lon=${state.longitude}&units=metric&lang=${language}&appid=${secrets.YOUR_API_KEY}`
-      : `https://api.openweathermap.org/data/2.5/forecast?q=${state.city},${state.country}&units=metric&cnt=40&lang=${language}&appid=${secrets.YOUR_API_KEY}`
+  // const apiUrl =
+  //   props.latitude && props.longitude
+  //     ? `https://api.openweathermap.org/data/2.5/forecast?lat=${props.latitude}&lon=${props.longitude}&units=metric&lang=${language}&appid=${secrets.YOUR_API_KEY}`
+  //     : `https://api.openweathermap.org/data/2.5/forecast?q=${props.city},${props.country}&units=metric&cnt=40&lang=${language}&appid=${secrets.YOUR_API_KEY}`
 
   useEffect(() => {
-    setState(props)
+    // setState(props)
 
     const getForecast = async () => {
       try {
         setLoading(true)
-        const response = await axios({
-          method: 'get',
-          url: apiUrl
+        const response = await axios(
+          url
+          // apiUrl
           // url: `https://api.openweathermap.org/data/2.5/forecast?lat=${state.latitude}&lon=${state.longitude}&units=metric&lang=${language}&appid=${secrets.YOUR_API_KEY}`
           // url: `https://api.openweathermap.org/data/2.5/forecast?q=${state.city},${state.country}&units=metric&cnt=40&lang=${language}&appid=${secrets.YOUR_API_KEY}`
-        })
+        )
         const { data } = response
         setData(data)
       } catch (error) {
         console.log('ERROR IN API CALL', error)
-        setError(error)
+        setError(error.message)
       } finally {
         setLoading(false)
       }
     }
 
     getForecast()
-  }, [
-    props,
-    apiUrl,
-    state.latitude,
-    state.longitude,
-    state.city,
-    state.country,
-    state.language
-  ])
+  }, [url])
 
-  return [data, loading, error]
+  return [[data, loading, error], setUrl]
 }
+// props,
+// // apiUrl,
+// state.latitude,
+// state.longitude,
+// state.city,
+// state.country,
+// state.language

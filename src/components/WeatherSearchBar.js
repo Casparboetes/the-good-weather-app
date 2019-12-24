@@ -9,7 +9,7 @@ const WeatherSearchBar = ({ value, handleChange, handleKeyPress }) => {
         <h3 className='question'>Where is the good weather?</h3>
         <input
           type='text'
-          value={value}
+          defaultValue={value}
           onInput={handleChange}
           onKeyPress={handleKeyPress}
         />
