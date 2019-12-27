@@ -22,7 +22,7 @@ export const useAsyncGetForecast = () => {
         setData(data)
       } catch (error) {
         console.log(error.message)
-        // setIsError(error.message)
+        setIsError(error.message)
       } finally {
         setLoading(false)
       }

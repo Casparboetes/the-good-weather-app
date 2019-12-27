@@ -11,7 +11,6 @@ const language = 'en'
 
 export default () => {
   const [[data, isLoading, isError], setUrl] = useAsyncGetForecast()
-  const [errorMessage, setErrorMessage] = useState()
   const [searchTerm, setSearchTerm] = useState('')
   const [hasGeolocation, setHasGeolocation] = useState()
   const [flag, setFlag] = useState()
@@ -42,7 +41,8 @@ export default () => {
 
   const error = error => {
     if (error) {
-      setErrorMessage(!error.code === 3 ? error.message : null)
+      const { message } = error
+      console.log(!message === 3 ? message : null)
     }
   }
 
