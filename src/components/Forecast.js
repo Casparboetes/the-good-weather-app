@@ -1,5 +1,5 @@
 import React from 'react'
-import MaxMinTemp from './MaxMinTemp'
+import { removeDecimal } from '../utils'
 
 const foreCastStyle = {
   width: '100%',
@@ -9,25 +9,18 @@ const foreCastStyle = {
 
 const degreeSymbol = '°'
 
-export const Forecast = ({ data, loading, error }) => {
-  if (!data || loading) return <div></div> // PROBABLY REMOVE THIS
-  if (!data && error) return <div>Something went wrong ...</div>
+export const Forecast = ({ data, isLoading, isError }) => {
+  if (!data || isLoading) return <></>
+  if (!data && isError) return <div>Something went wrong ...</div>
 
   const {
-    city: { name }
+    city: { name: cityName }
   } = data
 
   const {
-    main: { temp, temp_max: tempMax, temp_min: tempMin },
+    main: { temp },
     weather: [{ description, icon }]
   } = data.list[0]
-
-  const removeDecimal = temp => {
-    if (temp) {
-      const degreeTofixed = temp.toFixed(0)
-      return degreeTofixed
-    }
-  }
 
   const capitalizeFirstLetter = string => {
     if (string) {
@@ -38,22 +31,24 @@ export const Forecast = ({ data, loading, error }) => {
   return (
     <div className='card' style={foreCastStyle}>
       <div className='card__container'>
-        <h1 className='card__title'>{name}</h1>
+        <p style={{ marginBottom: 0 }} className='card__title'>
+          {cityName}
+        </p>
+        <h3
+          style={{ marginTop: 0, marginBottom: '1rem' }}
+          className='card__description--capitalized'
+        >
+          {capitalizeFirstLetter(description)}
+        </h3>
         <img
           className='card__img'
           src={icon ? `http://openweathermap.org/img/wn/${icon}@2x.png` : null}
           alt={description}
         ></img>
-        <h1 className='card__temp'>
+        <h1 style={{ marginTop: 0, marginBottom: 0 }} className='card__temp'>
           {removeDecimal(temp)}
           {temp ? degreeSymbol : null}
         </h1>
-        <MaxMinTemp
-          props={[removeDecimal(tempMax), removeDecimal(tempMin), degreeSymbol]}
-        />
-        <h4 className='card__description--capitalized'>
-          {capitalizeFirstLetter(description)}
-        </h4>
       </div>
     </div>
   )

@@ -1,10 +1,16 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway&display=swap');
+
+/* font-family: 'Raleway', sans-serif; */
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'Raleway', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+    'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* background: url('./assets/istockphoto-908024254-1024x1024.jpg'); */
+  /* background-size: cover; */
+  /* background-repeat: no-repeat; */
 }
 
 code {

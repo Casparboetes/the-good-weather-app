@@ -8,19 +8,27 @@ import './App.css'
 
 const language = 'en'
 
+const squareStyle = {
+  height: '5rem',
+  width: '5rem'
+}
+
+const square = [0, 1, 2, 3, 4, 5, 6, 7]
+
 export default () => {
-  const [[data, loading, error], setUrl] = useAsyncGetForecast()
+  const [[data, isLoading, isError], setUrl] = useAsyncGetForecast()
   const [errorMessage, setErrorMessage] = useState()
   const [searchTerm, setSearchTerm] = useState('')
   const [props, setProps] = useState({})
-  const [flag, setFlag] = useState(true)
+  const [flag, setFlag] = useState(false)
+  const [hasGeolocation, setHasGeolocation] = useState()
 
   const onEnter = event => {
     if (event.key === 'Enter') {
       setUrl(
-        `https://api.openweathermap.org/data/2.5/forecast?q=${searchTerm},${null}&units=metric&cnt=40&lang=${language}&appid=02ceeb04ea9bec37d93a471d1171d9ce`
+        `https://api.openweathermap.org/data/2.5/forecast?q=${searchTerm},${null}&units=metric&cnt=40&lang=${language}`
       )
-      setFlag(false)
+      setFlag(true)
       setSearchTerm((event.target.value = ''))
     }
   }
@@ -29,36 +37,64 @@ export default () => {
     setSearchTerm(event.target.value)
   }
 
-  const onPositionRecieved = ({ coords }) => {
+  const succes = ({ coords }) => {
+    setHasGeolocation(true)
+
     if (coords) {
+      console.log(coords)
       setUrl(
-        `https://api.openweathermap.org/data/2.5/forecast?lat=${coords.latitude}&lon=${coords.longitude}&units=metric&lang=${language}&appid=02ceeb04ea9bec37d93a471d1171d9ce`
+        `https://api.openweathermap.org/data/2.5/forecast?lat=${coords.latitude}&lon=${coords.longitude}&units=metric&lang=${language}`
       )
     }
+    // window.location.reload(coords)
   }
 
-  const onPositionNotRecieved = ({ message }) => {
-    if (message) {
-      setErrorMessage(message)
+  const error = error => {
+    // console.log('ERROR(' + error.code + '): ' + error.message)
+    // if (message) {
+    // setErrorMessage(message)
+    // }
+  }
+  const findGeolocation = () => {
+    console.log('FIND ME BITCHES')
+  }
+
+  if (navigator.geolocation && !flag) {
+    if (!navigator.geolocation) {
+      setHasGeolocation(false)
+    } else {
+      navigator.geolocation.getCurrentPosition(succes, error, {
+        timeout: 5
+      })
+      // setHasGeolocation(true)
     }
   }
-
-  if (navigator.geolocation && flag) {
-    navigator.geolocation.getCurrentPosition(
-      onPositionRecieved,
-      onPositionNotRecieved,
-      {
-        timeout: 5
-      }
-    )
-  }
+  const numbers = [1, 2, 3, 4, 5]
+  const colors = [
+    '#FFBC9E',
+    '#6C7179',
+    '#cdd5e0',
+    '#89a4c7',
+    '#cdd5e0',
+    '#ad62aa',
+    '#9aceff',
+    '#4e709d'
+  ]
+  const listItems = colors.map(color => (
+    <li style={{ width: '10rem', height: '10rem', backgroundColor: color }}>
+      <div></div>
+    </li>
+  ))
 
   return (
-    <div className='App' style={{ backgroundColor: '#ff896b' }}>
+    <div
+      className='App'
+      onLoad={findGeolocation}
+      // style={{ backgroundColor: '#ff896b' }}
+    >
+      {/* <ul>{listItems}</ul> */}
       <div className='App__body'>
-        {/* {error !== 'Timeout expired' ? (
-          <div>...</div>
-        ) : ( */}
+        {/* {!hasGeolocation ? ( */}
         <div>
           <span>
             <WeatherSearchBar
@@ -68,8 +104,23 @@ export default () => {
             />
           </span>
         </div>
-        <Forecast data={data} loading={loading} error={error} />
-        <FiveDayForecast data={data} loading={loading} error={error} />
+        {/* ) : ( */}
+        {/* <p>hallo test</p> */}
+        {/* )} */}
+        {/* {error !== 'Timeout expired' ? (
+          <div>...</div>
+        ) : ( */}
+        {/* <div>
+          <span>
+            <WeatherSearchBar
+              value={searchTerm}
+              handleChange={userInput}
+              handleKeyPress={onEnter}
+            />
+          </span>
+        </div> */}
+        <Forecast data={data} isLoading={isLoading} isError={isError} />
+        <FiveDayForecast data={data} isLoading={isLoading} isError={isError} />
       </div>
     </div>
   )

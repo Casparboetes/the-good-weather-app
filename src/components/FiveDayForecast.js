@@ -1,11 +1,13 @@
 import React from 'react'
-import removeDecimal from '../utils'
+import MaxMinTemp from './MaxMinTemp'
+import { removeDecimal } from '../utils'
+import { merge as _merge } from 'lodash'
 
 const degreeSymbol = '°'
 
-const FiveDayForecast = ({ data, loading, error }) => {
-  if (!data || loading) return <div></div> // PROBABLY REMOVE THIS
-  if (!data && error) return <div>Something went wrong ...</div>
+const FiveDayForecast = ({ data, isLoading, isError }) => {
+  if (!data || isLoading) return <div></div> // PROBABLY REMOVE THIS
+  if (!data && isError) return <div>Something went wrong ...</div>
   const { list } = data
 
   const getFullDate = unixTimestamp => {
@@ -30,32 +32,53 @@ const FiveDayForecast = ({ data, loading, error }) => {
     return dayOfTheWeek
   }
 
-  const fiveDayForecast = list => {
+  const getFiveDayForecast = list => {
     const itIsTwelveOclock = '12:00:00'
+    const itIsTwelveOclockAtNight = '00:00:00'
+
     const filterOnTwelveOClock = list.filter(el =>
       el.dt_txt.includes(itIsTwelveOclock)
     )
 
-    const newArray = filterOnTwelveOClock.map(el => {
+    const filterOnTwelveAtNight = list.filter(el =>
+      el.dt_txt.includes(itIsTwelveOclockAtNight)
+    )
+
+    const dayTimeWeatherInfo = filterOnTwelveOClock.map(el => {
       const {
         dt,
-        main: { temp },
+        main: { temp: dayTemp },
         weather: [{ id: weatherId, description, icon }]
       } = el
 
-      return { dt, temp, weatherId, icon, description }
+      return { dt, dayTemp, weatherId, icon, description }
     })
 
-    return newArray
+    const nightTimeWeatherInfo = filterOnTwelveAtNight.map(el => {
+      const {
+        main: { temp: nightTemp },
+        dt_txt
+      } = el
+
+      return { nightTemp, dt_txt }
+    })
+
+    const combineDayAndNightInfo = _merge(
+      dayTimeWeatherInfo,
+      nightTimeWeatherInfo
+    )
+
+    return combineDayAndNightInfo
   }
 
   return (
     <ul>
-      {fiveDayForecast(list).map((el, index) => (
-        <li key={index}>
-          <h3>{getWeekday(el.dt)}</h3>
+      {getFiveDayForecast(list).map((el, index) => (
+        <li style={{ padding: '0.5rem' }} key={index}>
+          <h6 style={{ marginBottom: 0, fontWeight: 'normal' }}>
+            {getWeekday(el.dt)}
+          </h6>
           <img
-            style={{ transform: 0.5 }}
             // className='card__img'
             src={
               el.icon
@@ -64,10 +87,13 @@ const FiveDayForecast = ({ data, loading, error }) => {
             }
             alt={el.description}
           ></img>
-          <h2>
-            {removeDecimal(el.temp)}
-            {el.temp ? degreeSymbol : null}
-          </h2>
+          <MaxMinTemp
+            props={[
+              removeDecimal(el.dayTemp),
+              removeDecimal(el.nightTemp),
+              degreeSymbol
+            ]}
+          />
         </li>
       ))}
     </ul>

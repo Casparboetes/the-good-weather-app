@@ -1,10 +1,10 @@
 /* optional colors for background? 
-  sun = #ff896b
-  Thunderstorm = #393e46
-  Drizzle = #89a4c7
-  Rain = #1f3c88
-  Snow = #f3f9fb
-  Atmosphere = #cdd5e0
+  sun = #FFBC9E
+  Thunderstorm = #6C7179
+  Drizzle = #cdd5e0
+  Rain = #89a4c7
+  Snow = #cdd5e0 50cfca
+  Atmosphere = #ad62aa
   Clear = #9aceff
   Clouds = #4e709d
   black = #000
@@ -12,22 +12,29 @@
 
 */
 body {
-  background-color: #ff896b;
+  background-color: #9aceff;
 }
 .App {
-  text-align: center;
-  background-color: #89a4c7;
+  /* text-shadow: 0 1px 5px rgba(0, 0, 0, 0.1); */
+  /* text-align: center; */
+  /* background-color: #89a4c7; */
   /* filter: brightness(85%); */
-  min-height: 100vh;
+  /* min-height: 200vh; */
+  margin-top: 5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  /* font-size: calc(10px + 2vmin); */
   color: white;
 }
 
 .App__body {
+  /* text-shadow: 0 1px 5px rgba(0, 0, 0, 0.1); */
+  text-align: center;
+  font-size: calc(14px + 2vmin);
+  color: white;
+
   /* background-color: #89a4c7;
   min-height: 100vh;
   display: flex;
@@ -53,19 +60,19 @@ ul > li {
 
 @media (prefers-reduced-motion: no-preference) {
   .card__img {
-    transform: scale(1.1);
+    transform: scale(1.5);
     animation: Grow-Shrink-slowly infinite 30s linear;
   }
 }
 
 @keyframes Grow-Shrink-slowly {
   from {
-    transform: scale(1.1);
+    transform: scale(1.5);
   }
   50% {
     transform: scale(1.7);
   }
   to {
-    transform: scale(1.1);
+    transform: scale(1.5);
   }
 }

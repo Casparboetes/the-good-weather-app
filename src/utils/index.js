@@ -1,7 +1,11 @@
-const removeDecimal = temp => {
-  const degreeTofixed = temp.toFixed(0)
+// const removeDecimal = temp => {
+//   const degreeTofixed = temp.toFixed(0)
 
-  return degreeTofixed
-}
+//   return degreeTofixed
+// }
 
-export default removeDecimal
+// export default removeDecimal
+
+import removeDecimal from './removeDecimal.js'
+
+export { removeDecimal }
