@@ -53,7 +53,7 @@ export default () => {
   }
 
   const setMoodColor = () => {
-    const main = data ? data.list[0].weather[0].main : null
+    const mainWeaterType = data ? data.list[0].weather[0].main : null
     const thunderstorm = 'Thunderstorm'
     const drizzle = 'Drizzle'
     const rain = 'Rain'
@@ -62,19 +62,19 @@ export default () => {
     const clear = 'Clear'
     const clouds = 'Clouds'
 
-    if (main === thunderstorm) {
+    if (mainWeaterType === thunderstorm) {
       return (document.body.style.backgroundColor = '#6C7179')
-    } else if (main === drizzle) {
+    } else if (mainWeaterType === drizzle) {
       return (document.body.style.backgroundColor = '#cdd5e0')
-    } else if (main === rain) {
+    } else if (mainWeaterType === rain) {
       return (document.body.style.backgroundColor = '#89a4c7')
-    } else if (main === snow) {
+    } else if (mainWeaterType === snow) {
       return (document.body.style.backgroundColor = '#cdd5e0')
-    } else if (main === atmosphere) {
+    } else if (mainWeaterType === atmosphere) {
       return (document.body.style.backgroundColor = '#ad62aa')
-    } else if (main === clear) {
+    } else if (mainWeaterType === clear) {
       return (document.body.style.backgroundColor = '#9aceff')
-    } else if (main === clouds) {
+    } else if (mainWeaterType === clouds) {
       return (document.body.style.backgroundColor = '#4e709d')
     } else {
       return
