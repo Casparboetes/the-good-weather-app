@@ -71,6 +71,11 @@ const FiveDayForecast = ({ data, isLoading, isError }) => {
     return combineDayAndNightInfo
   }
 
+  const showDayIcon = icon => {
+    const dayIcon = icon.slice(0, -1) + 'd'
+    return dayIcon
+  }
+
   return (
     <ul>
       {getFiveDayForecast(list).map((el, index) => (
@@ -82,7 +87,9 @@ const FiveDayForecast = ({ data, isLoading, isError }) => {
             // className='card__img'
             src={
               el.icon
-                ? `http://openweathermap.org/img/wn/${el.icon}@2x.png`
+                ? `http://openweathermap.org/img/wn/${showDayIcon(
+                    el.icon
+                  )}@2x.png`
                 : null
             }
             alt={el.description}
