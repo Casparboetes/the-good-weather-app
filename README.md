@@ -15,6 +15,7 @@ By Caspar Boetes, made with React.js.
 ## secrets.js
 To make the api call add the following secret.js to your root.
 
+```
 const secret = {
   name: 'Capsar Boetes',
   email: 'casparboetes@gmail.com',
@@ -22,7 +23,9 @@ const secret = {
 }
 
 export default secret
+```
 
-![the-good-weather-app]()
+
+![the-good-weather-app](cover.png)
 
 
