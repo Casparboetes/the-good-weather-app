@@ -6,7 +6,7 @@ import { merge as _merge } from 'lodash'
 const degreeSymbol = '°'
 
 const FiveDayForecast = ({ data, isLoading, isError }) => {
-  if (!data || isLoading) return <div></div> // PROBABLY REMOVE THIS
+  if (!data || isLoading) return <div></div>
   if (!data && isError) return <div>Something went wrong ...</div>
   const { list } = data
 

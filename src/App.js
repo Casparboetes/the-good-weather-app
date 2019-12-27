@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect } from 'react'
 import { useAsyncGetForecast } from './api'
 import { Forecast } from './components/Forecast'
 import FiveDayForecast from './components/FiveDayForecast'
@@ -8,27 +9,19 @@ import './App.css'
 
 const language = 'en'
 
-const squareStyle = {
-  height: '5rem',
-  width: '5rem'
-}
-
-const square = [0, 1, 2, 3, 4, 5, 6, 7]
-
 export default () => {
   const [[data, isLoading, isError], setUrl] = useAsyncGetForecast()
   const [errorMessage, setErrorMessage] = useState()
   const [searchTerm, setSearchTerm] = useState('')
-  const [props, setProps] = useState({})
-  const [flag, setFlag] = useState(false)
   const [hasGeolocation, setHasGeolocation] = useState()
+  const [flag, setFlag] = useState()
 
   const onEnter = event => {
+    setFlag(true)
     if (event.key === 'Enter') {
       setUrl(
         `https://api.openweathermap.org/data/2.5/forecast?q=${searchTerm},${null}&units=metric&cnt=40&lang=${language}`
       )
-      setFlag(true)
       setSearchTerm((event.target.value = ''))
     }
   }
@@ -41,86 +34,79 @@ export default () => {
     setHasGeolocation(true)
 
     if (coords) {
-      console.log(coords)
       setUrl(
         `https://api.openweathermap.org/data/2.5/forecast?lat=${coords.latitude}&lon=${coords.longitude}&units=metric&lang=${language}`
       )
     }
-    // window.location.reload(coords)
   }
 
   const error = error => {
-    // console.log('ERROR(' + error.code + '): ' + error.message)
-    // if (message) {
-    // setErrorMessage(message)
-    // }
-  }
-  const findGeolocation = () => {
-    console.log('FIND ME BITCHES')
-  }
-
-  if (navigator.geolocation && !flag) {
-    if (!navigator.geolocation) {
-      setHasGeolocation(false)
-    } else {
-      navigator.geolocation.getCurrentPosition(succes, error, {
-        timeout: 5
-      })
-      // setHasGeolocation(true)
+    if (error) {
+      setErrorMessage(!error.code === 3 ? error.message : null)
     }
   }
-  const numbers = [1, 2, 3, 4, 5]
-  const colors = [
-    '#FFBC9E',
-    '#6C7179',
-    '#cdd5e0',
-    '#89a4c7',
-    '#cdd5e0',
-    '#ad62aa',
-    '#9aceff',
-    '#4e709d'
-  ]
-  const listItems = colors.map(color => (
-    <li style={{ width: '10rem', height: '10rem', backgroundColor: color }}>
-      <div></div>
-    </li>
-  ))
+
+  if (navigator.geolocation && !hasGeolocation && !flag) {
+    navigator.geolocation.getCurrentPosition(succes, error, {
+      timeout: 5
+    })
+  }
+
+  const setMoodColor = () => {
+    const main = data ? data.list[0].weather[0].main : null
+    const thunderstorm = 'Thunderstorm'
+    const drizzle = 'Drizzle'
+    const rain = 'Rain'
+    const snow = 'Snow'
+    const atmosphere = 'Atmosphere'
+    const clear = 'Clear'
+    const clouds = 'Clouds'
+
+    if (main === thunderstorm) {
+      return (document.body.style.backgroundColor = '#6C7179')
+    } else if (main === drizzle) {
+      return (document.body.style.backgroundColor = '#cdd5e0')
+    } else if (main === rain) {
+      return (document.body.style.backgroundColor = '#89a4c7')
+    } else if (main === snow) {
+      return (document.body.style.backgroundColor = '#cdd5e0')
+    } else if (main === atmosphere) {
+      return (document.body.style.backgroundColor = '#ad62aa')
+    } else if (main === clear) {
+      return (document.body.style.backgroundColor = '#9aceff')
+    } else if (main === clouds) {
+      return (document.body.style.backgroundColor = '#4e709d')
+    } else {
+      return
+    }
+  }
+
+  useEffect(() => {
+    setMoodColor()
+  }, [setMoodColor])
 
   return (
-    <div
-      className='App'
-      onLoad={findGeolocation}
-      // style={{ backgroundColor: '#ff896b' }}
-    >
-      {/* <ul>{listItems}</ul> */}
+    <div className='App'>
       <div className='App__body'>
-        {/* {!hasGeolocation ? ( */}
-        <div>
-          <span>
-            <WeatherSearchBar
-              value={searchTerm}
-              handleChange={userInput}
-              handleKeyPress={onEnter}
+        <span>
+          <WeatherSearchBar
+            value={searchTerm}
+            handleChange={userInput}
+            handleKeyPress={onEnter}
+          />
+        </span>
+        {!hasGeolocation && !flag ? (
+          <></>
+        ) : (
+          <div>
+            <Forecast data={data} isLoading={isLoading} isError={isError} />
+            <FiveDayForecast
+              data={data}
+              isLoading={isLoading}
+              isError={isError}
             />
-          </span>
-        </div>
-        {/* ) : ( */}
-        {/* <p>hallo test</p> */}
-        {/* )} */}
-        {/* {error !== 'Timeout expired' ? (
-          <div>...</div>
-        ) : ( */}
-        {/* <div>
-          <span>
-            <WeatherSearchBar
-              value={searchTerm}
-              handleChange={userInput}
-              handleKeyPress={onEnter}
-            />
-          </span>
-        </div> */}
-        <Forecast data={data} isLoading={isLoading} isError={isError} />
-        <FiveDayForecast data={data} isLoading={isLoading} isError={isError} />
+          </div>
+        )}
       </div>
     </div>
   )
