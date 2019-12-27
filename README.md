@@ -26,6 +26,6 @@ export default secret
 ```
 
 
-![the-good-weather-app](https://github.com/Casparboetes/the-good-weather-app/issues/1)
+![the-good-weather-app](https://user-images.githubusercontent.com/34174855/71524955-fd3a0200-28cf-11ea-9ca5-9c352bec1166.png)
 
 
