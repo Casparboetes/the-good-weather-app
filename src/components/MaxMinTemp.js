@@ -7,7 +7,6 @@ const dayStyle = {
 }
 
 const nightStyle = {
-  color: '#DCDCDC',
   marginTop: '0',
   marginBottom: '0'
 }
