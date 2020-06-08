@@ -1,5 +1,5 @@
 # the-good-weather-app
-Good weather is a state mind
+Good weather is a state of mind
 
 
 By Caspar Boetes, made with React.js.
